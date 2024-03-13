@@ -29,14 +29,14 @@ loop foreach BSN per zorgaanbieder
 end
 ```
 
-# Aanmelden BSN:ZA1 in LokalisatieRegister tbv 'WAAR' vraag
+# Aanmelden BSN:ZA1 in LokalisatieRegister (LR) tbv 'WAAR' vraag
 ```mermaid
 sequenceDiagram
 autonumber
 loop foreach BSN
-  Saas_aanbieder ->> LokalisatieRegister: upload DEP(BSN)@LR, ZA1
-  LokalisatieRegister ->> LokalisatieRegister: decrypt DEP(BSN)@LR naar PS(BSN)@LR
-  LokalisatieRegister ->> LokalisatieRegister: save PS(BSN)@LR, ZA1
+  Saas_aanbieder ->> LR: upload DEP(BSN)@LR, ZA1
+  LR ->> LR: decrypt DEP(BSN)@LR naar PS(BSN)@LR
+  LR ->> LR: save PS(BSN)@LR, ZA1
 end
 ```
 
@@ -51,17 +51,19 @@ loop foreach BSN
 end
 ```
 
-# 'WAAR' vraag stellen aan LokalisatieRegister (LR)
+# 'WAAR' vraag stellen aan LokalisatieRegister (LR) op basis toestemming
 
 ```mermaid
 sequenceDiagram
 autonumber
-Saas_aanbieder ->> ToestemmingsVoorziening: Open Toestemmingsvraag+DEP(BSN)LR+DEP(BSN)@TV, Za1?
-ToestemmingsVoorziening ->> Saas_aanbieder: toestemmingsantwoord + DEP(BSN)@TV (signed)
-Saas_aanbieder ->> LokalisatieRegister: Lokalisatievraag \n DEP(BSN)@LR, toestemmingsantwoord, ZA1
-LokalisatieRegister ->> LokalisatieRegister: decryptie DEP(BSN)@LR naar PS(BSN)@LR
-LokalisatieRegister ->> LokalisatieRegister: valideer toestemmingsantwoord
-LokalisatieRegister ->> LokalisatieRegister: zoek bijbehorende ZA's waar toestemming voor is
-LokalisatieRegister ->> Saas_aanbieder: Stuur antwoord op \n DEP(BSN)@ZA1, LR, ZA's
-end
+Saas_aanbieder ->> TV: Open Toestemmingsvraag [DEP(BSN)@LR, DEP(BSN)@TV], Za1
+TV ->> TV: decrypt DEP(BSN)@TV to PS(BSN)@TV
+TV ->> TV: find toestemmingsantwoord [PS]
+TV ->> TV: sign [toestemmingsantwoord, DEP(BSN)@LR, DEP(BSN)@TV]
+TV ->> Saas_aanbieder: return [toestemmingsantwoord, DEP(BSN)@LR, DEP(BSN)@TV]
+Saas_aanbieder ->> LR: Lokalisatievraag \n [toestemmingsantwoord, DEP(BSN)@LR, DEP(BSN)@TV], ZA1
+LR ->> LR: decrypt DEP(BSN)@LR to PS(BSN)@LR
+LR ->> LR: validate toestemmingsantwoord
+LR ->> LR: find permitted organisations (zorgaanbieders)
+LR ->> Saas_aanbieder: Send lokalisatieantwoord
 ```
