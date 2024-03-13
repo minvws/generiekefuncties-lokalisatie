@@ -21,8 +21,8 @@ sequenceDiagram
 autonumber
 loop foreach BSN per zorgaanbieder
   Saas_aanbieder ->> BSNk: request DEP(BSN)@[ZA1, LR, TV]
-  Saas_aanbieder ->> Saas_aanbieder: create dep's
-  Saas_aanbieder ->> Saas_aanbieder: sign [DEP(BSN)@ZA1, DEP(BSN)@LR, DEP(BSN)@TV]
+  BSNk ->> BSNk: create dep's
+  BSNk ->> BSNk: sign [DEP(BSN)@ZA1, DEP(BSN)@LR, DEP(BSN)@TV]
   BSNk ->> Saas_aanbieder:  return [DEP(BSN)@ZA1, DEP(BSN)@LR, DEP(BSN)@TV]
   Saas_aanbieder ->> Saas_aanbieder:  decrypt DEP(BSN)@ZA1 =PS(BSN)@ZA1 ("PolfmorfPSeudoniem")
   Saas_aanbieder ->> Saas_aanbieder:  Save PS & DEPS
