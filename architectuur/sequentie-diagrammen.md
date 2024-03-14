@@ -11,10 +11,10 @@ Saas_aanbieder ->> Saas_aanbieder: start zelf BSNk instantantie in HSM
 Saas_aanbieder ->> Koppeltabel: registreer obv OIN/URA/Zorgaanbieder
 ```
 
-# Aanmelden BSN’s en opzetten naar DEPs
+# Opvragen DEP's op basis BSN’s
 Voor de meest voorkomende partijen DEPs opvragen zodat die direct beschikbaar zijn in een interactie met het LokalisatieRegister (LR), ToestemmingsVoorziening (TV).
 
-Aanvragen DEP’s voor zelf (ZA1): Om tot het eigen Pseudobiem (PS) te komen moet er eerst een DEP@ZA1 opgevraagd worden en vervolgens worden ge-decrypt met eigen sleutelmateriaal.
+Aanvragen DEP’s voor zelf (ZA1): Om tot het eigen Pseudoniem (PS) te komen moet er eerst een DEP@ZA1 opgevraagd worden en vervolgens worden ge-decrypt met eigen sleutelmateriaal.
 
 ```mermaid
 sequenceDiagram
@@ -24,7 +24,7 @@ loop foreach BSN per zorgaanbieder
   BSNk ->> BSNk: create & sign each requested DEP
   BSNk ->> BSNk: sign [DEP(BSN)@ZA1, DEP(BSN)@LR, DEP(BSN)@TV]
   BSNk ->> Saas_aanbieder:  return [DEP(BSN)@ZA1, DEP(BSN)@LR, DEP(BSN)@TV]
-  Saas_aanbieder ->> Saas_aanbieder:  decrypt DEP(BSN)@ZA1 =PS(BSN)@ZA1 ("PolfmorfPSeudoniem")
+  Saas_aanbieder ->> Saas_aanbieder:  decrypt DEP(BSN)@ZA1 to PS(BSN)@ZA1 ("PolfmorfPSeudoniem")
   Saas_aanbieder ->> Saas_aanbieder:  Save PS & DEPS
 end
 ```
@@ -35,7 +35,7 @@ sequenceDiagram
 autonumber
 loop foreach BSN
   Saas_aanbieder ->> LR: upload DEP(BSN)@LR, ZA1
-  LR ->> LR: decrypt DEP(BSN)@LR naar PS(BSN)@LR
+  LR ->> LR: decrypt DEP(BSN)@LR to PS(BSN)@LR
   LR ->> LR: save PS(BSN)@LR, ZA1
 end
 ```
@@ -56,12 +56,12 @@ end
 ```mermaid
 sequenceDiagram
 autonumber
-Saas_aanbieder ->> TV: Open Toestemmingsvraag [DEP(BSN)@LR, DEP(BSN)@TV], Za1
+Saas_aanbieder ->> TV: Open Toestemmingsvraag [DEP(BSN)@ZA1, DEP(BSN)@LR, DEP(BSN)@TV], Za1
 TV ->> TV: decrypt DEP(BSN)@TV to PS(BSN)@TV
 TV ->> TV: find toestemmingsantwoord [PS]
-TV ->> TV: sign [toestemmingsantwoord, DEP(BSN)@LR, DEP(BSN)@TV]
-TV ->> Saas_aanbieder: return [toestemmingsantwoord, DEP(BSN)@LR, DEP(BSN)@TV]
-Saas_aanbieder ->> LR: Lokalisatievraag \n [toestemmingsantwoord, DEP(BSN)@LR, DEP(BSN)@TV], ZA1
+TV ->> TV: sign [toestemmingsantwoord, [DEP(BSN)@ZA1, DEP(BSN)@LR, DEP(BSN)@TV]]
+TV ->> Saas_aanbieder: return [toestemmingsantwoord, [DEP(BSN)@ZA1, DEP(BSN)@LR, DEP(BSN)@TV]]
+Saas_aanbieder ->> LR: Lokalisatievraag [toestemmingsantwoord,[DEP(BSN)@ZA1, DEP(BSN)@LR, DEP(BSN)@TV]], ZA1
 LR ->> LR: decrypt DEP(BSN)@LR to PS(BSN)@LR
 LR ->> LR: validate toestemmingsantwoord
 LR ->> LR: find permitted organisations (zorgaanbieders)
