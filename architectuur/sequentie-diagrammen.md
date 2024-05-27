@@ -87,3 +87,40 @@ TV ->> TV: find toestemmingsantwoord [PS]
 TV->>ZA2: permit
 ZA2->>Saas_aanbieder: response to query
 ```
+
+# use-case IIa: onderzoeksdata versturen naar onderzoeksinstituut 1 (OI1)
+```mermaid
+sequenceDiagram
+autonumber
+Saas_aanbieder->> BSNk: request DEP [OI1], DEP(BSN)@ZA1
+BSNk ->> BSNk: create & sign each requested DEP
+BSNk ->> Saas_aanbieder:  return (DEP(BSN)@OI1)
+Saas_aanbieder->>TV: ZA2->>TV: Gesloten Toestemmingsvraag <br/>[DEP(BSN)@ZA1, DEP(BSN)@TV], ZA1, ZA1-type
+Saas_aanbieder->>OI1:  push (data, DEP(BSN)@OI1)
+OI1->>OI1: decrypt DEP(BSN)@OI1 to PS(BSN)@OI1
+OI1->>OI1: store (data, PS(BSN)@OI1)
+```
+
+# use-case IIb: onderzoeksdata versturen naar onderzoeksinstituut 1 (OI1) en vragenlijst naar berichtenbox (BB)
+```mermaid
+sequenceDiagram
+autonumber
+Saas_aanbieder->> BSNk: request DEP [OI1, BB1], DEP(BSN)@ZA1
+BSNk ->> BSNk: create & sign each requested DEP
+BSNk ->> Saas_aanbieder:  return [DEP(BSN)@OI1, DEP(BSN)@BB]
+Saas_aanbieder->>TV: ZA2->>TV: Gesloten Toestemmingsvraag <br/>[DEP(BSN)@ZA1, DEP(BSN)@TV], ZA1, ZA1-type
+Saas_aanbieder->>OI1:  push (data, [DEP(BSN)@OI1, DEP(BSN)@BB])
+OI1->>OI1: decrypt (DEP(BSN)@OI1 to PS(BSN)@OI1)
+OI1->>OI1: store (data, PS(BSN)@OI1)
+OI1->>BB: send (vragenlijst, [DEP(BSN)@OI1, DEP(BSN)@BB])
+BB->>BB: decrypt (DEP(BSN)@BB to PS(BSN)@BB)
+BB->>BB: find e-mailadres (PS(BSN)@BB)
+BB->>BB: deliver mail
+```
+
+# use-case IIc: Onderzoeksinstituut wil op basis ontvangen data aanvullende vragen stellen aan bv Huisarts of apotheek
+1) lokalisatie Huisarts/apotheek (mag niet-bsn gerechtigde partij OI1 DEPjes aanvragen voor LR?: vraag aan BSNk)
+2) Vraag DEP aan voor Huisarts/apotheek (via ZA1 die data aanleverde of mag niet-bvn gerechtigde partij OI1 DEPjes aanvragen voor Huisarts/Apotheek).
+3) Query aan Huisarts/apotheek
+4) Huisarts/apotheek checked toestemming
+5) Huisarts/apotheek levert gegevens aan
