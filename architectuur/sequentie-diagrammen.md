@@ -136,7 +136,7 @@ LR ->> LR: validate toestemmingsantwoord
 LR ->> LR: find permitted organisations (zorgaanbieders)
 LR ->> OI1: Send lokalisatieantwoord [HA1]
 OI1 ->>BSNk: vraag DEP voor HA1? Dan ontvangt niet BSN-gerechtigde partij iets dat wel om te zetten is tot BSN....
-HA1->>
+
 ```
 1) lokalisatie Huisarts/apotheek (mag niet-bsn gerechtigde partij OI1 DEPjes aanvragen voor LR?: vraag aan BSNk)
 2) Vraag DEP aan voor Huisarts/apotheek (via ZA1 die data aanleverde of mag niet-bvn gerechtigde partij OI1 DEPjes aanvragen voor Huisarts/Apotheek).
