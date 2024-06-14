@@ -95,7 +95,7 @@ autonumber
 Saas_aanbieder->> BSNk: request DEP [OI1], DEP(BSN)@ZA1
 BSNk ->> BSNk: create & sign each requested DEP
 BSNk ->> Saas_aanbieder:  return (DEP(BSN)@OI1)
-Saas_aanbieder->>TV: ZA2->>TV: Gesloten Toestemmingsvraag <br/>[DEP(BSN)@ZA1, DEP(BSN)@TV], ZA1, ZA1-type
+Saas_aanbieder->>TV: Gesloten Toestemmingsvraag <br/>[DEP(BSN)@ZA1, DEP(BSN)@TV], ZA1, ZA1-type
 Saas_aanbieder->>OI1:  push (data, DEP(BSN)@OI1)
 OI1->>OI1: decrypt DEP(BSN)@OI1 to PS(BSN)@OI1
 OI1->>OI1: store (data, PS(BSN)@OI1)
