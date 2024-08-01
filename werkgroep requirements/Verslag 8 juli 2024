@@ -1,0 +1,40 @@
+# Aanwezigen
+* Jacob Hofdijk
+* Teun Wezenberg
+* Gunnar Ballzus 
+* Guido van 't Noordende
+* Vincent van den berg
+* Erwin Oord
+* Ron Obbens
+* Thomas van der Lans
+
+# Afwezig
+- Pascal Looije (heeft aangegeven niet deel te nemem)
+- Huib Hezemans/Johan Sneijders
+
+# 1. Programma implemenatie GF
+- Thomas opent de bijeenkomst om 13:00 digitaal WEB-ex. Doel van de vergadering is om een aftrap te geven voor requirements werkgroepen voor lokalisatie. 
+In de Github is als bijlage bij dit verslag is een uitgebreide opdracht geupload waarin ook het doel staat beschreven voor deze werkgroep. Deze is na deze vergadering opgesteld mede op basis van de vragen die in deze werkgroep sessie zijn gesteld. 
+Deze zal ook geagendeerd worden voor de volgende sessie. 
+
+# 2. Architectuur
+-	Ron doet kort verslag van de architectuur die beschreven is in de bijlage. Deze bijlage zal ook worden gedeeld.
+- Toon geeft aan hij benieuwd waarom er gekozen is voor een use-case waarbij er helemaal niet bekend is waar gegevens van de patient zijn op te vragen. Ron geeft aan dat dit een use-case waarin alle andere use-cases ook getackeld moeten kunnen worden. Evntuele behoeften kunnen in requirements worden uitgedrukt, daarom ook deze werkgroep.
+- Vincent geeft aan dat hij wel wat meer zou willen weten hoe deze polymorfe pseudenomisering (PP) moet gaan werken, omdat hier verschillende mogelijheden voor zijn. Duidelijk moet volgens hem zijn wel doel je hier mee wil bereiken voordat je een keuze maakt voor een invulling voor PP. Ron geeft aan dat die gesprekken nog lopen vanuit de architectuur werkgroep met o.a. BZK. 
+Als hier meer over bekend is zal dit aan deze werkgroep worden terugkoppeld.
+- Vincent geeft aan dat de definitie van broadcasting in deze context moet worden vastgelegd anders wordt de discussie hierover niet goed gevoerd. Ron geeft aan dat te herkennen hij zal hiervoor een voorzet doen.
+- Guido geeft aan veel moeite te hebben met de opzet en de doorloop van deze requirements werkgroep. Het doel is hem niet duidelijk en voor wie we dit doen met te korte doorloop om dit goed te kunnen doen. Ook kan hij zich niet vinden in het feit dat er al een architectuur ligt waarin deze werkgroep niet me kan denken. 
+Thomas geeft legt nog een keer uit wat de achtergrond, doel en opdracht is van deze werkgroep en waarom voor deze werkwijze is gekozen. Hij zal dit ook op papier zetten voor de volgende keer (zie bijlage).
+- Jacob geeft aan dat hij ook graag het zorgtraject mee wil nemen in de mogelijkheden om te lokaliseren. Ron geeft aan dat in overleg met de NEN-werkgroep dat dit ook aan de orde is gekomen en gekeken wordt welk meta-data hiervoor nodig is.
+- Aanvullend vraagt Jacob zich af of deze architectuur ook gaat leiden tot een NTA (technische afspraak) onder de NEN. Ron geeft aan afspraken hierover zeker nodig zijn en dat de mogelijkheid van een (N)TA hiervoor wordt onderzocht
+- Vanuit meerder deelnemers wordt een oproep gedaan om ook echt te zoeken naar de balans tussen privacy/security en gebruiksvriendelijkheid. Als het niet gebruiksvriendelijk is voor de eindgebruiker wordt er geen gebruik van gemaakt.
+
+# 3. Requirements opstellen
+- Thomas geeft aan dat we gezien de discussie geen tijd hebben gehad voor het opstellen van requirements. Hij nodigt de deelnemers uit om de requirements die beschreven zijn te lezen en van commentaar te voorzien. Dit voor nu even per mail of vast houden tot de volgende werkgroep.
+Bij eventuele nieuwe requirements te kijken of deze niet al passen bij de opgestelde requirements
+
+# 4. Planning
+- Thomas geeft aan dat hij gaat kijken wat er nog mogelijk is voor de vakantie van Ron. Datumpeiling volgt.
+
+# 5. Einde
+- 14:30
