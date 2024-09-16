@@ -24,11 +24,11 @@ columns 4
 	BurgerX-->NVIb
 ```
 
-In deze opzet heeft de NVI, die aangewezen is voor die burger, alle gegevens
-over die burger. Dit document werkt uit hoe deze toewijzing eruit kan zien en
-welke voor- en nadelen dit model heeft. Dit document gaat expliciet *niet* over
-een distributie model waarbij informatie over één burger over meerdere
-NVI-partijen verdeeld is.
+In deze opzet heeft de NVI, die aangewezen is voor die burger, een index van
+alle betrokken zorgorganisaties. Dit document werkt uit hoe deze toewijzing
+eruit kan zien en welke voor- en nadelen dit model heeft. Dit document gaat
+expliciet *niet* over een distributie model waarbij informatie over één burger
+over meerdere NVI-partijen verdeeld is.
 
 De huidige versie van het document dient enkel als discussie stuk en geeft geen
 definitief besluit.
@@ -43,10 +43,13 @@ een specifieke NVI.
 Bij de toewijzing van een NVI op basis van regio kan gebruik gemaakt worden van
 de woonplaats van de burger. Deze woonplaats kan via de Basisregistratie
 Personen (BRP) bepaald worden. De hieruit volgende NVI-lokaliseer taak kan
-eventueel centraal belegd worden. Deze sectie gaat uit van een centrale NVI-lokaliseringsservice (NVI-LS). Dit maakt deze taak expliciet. Het is wel mogelijk, indien alle betrokken een mogelijkheid hebben
-om direct de BRP te benaderen, ook dit deel decentraal te maken. 
+eventueel centraal belegd worden. Deze sectie gaat uit van een centrale
+NVI-lokaliseringsservice (NVI-LS). Dit maakt deze taak expliciet. Het is wel
+mogelijk, indien alle betrokken een mogelijkheid hebben om direct de BRP te
+benaderen, ook dit deel decentraal te maken. 
 
-Het onderstaande sequentie diagram laat zien hoe lokalisatie, tot en met het bepalen van de aan de burger toegewezen NVI.
+Het onderstaande sequentie diagram laat zien hoe lokalisatie, tot en met het
+bepalen van de aan de burger toegewezen NVI.
 
 ```mermaid
 sequenceDiagram
@@ -60,14 +63,25 @@ NVI-LS->>NVI-LS: Welke NVI hoort bij woonplaats X?
 NVI-LS->>XIS: Dit is NVI X
 ```
 
-
 ### Huisarts
 
 De huisarts wordt binnen de Nederlandse zorg als spil gezien. Dit maakt het
 logisch om een toewijzing van een NVI aan een burger plaats te laten vinden op
-basis van diens huisarts. Dit vereist dat bepaald kan worden welke huisarts bij
-een specifiek BSN hoort. Hiervoor is een (conceptuele) NVI-lokalisatieservice
-nodig. Deze kan op verschillende wijzen worden ingevuld.
+basis van diens huisarts. 
+
+Een belangrijk voordeel van de NVI per huisarts is dat de huisarts BSN
+gerechtigd is. Ook weet deze vanuit de spil functie de relatie met andere
+partijen al. Dit maakt dat er geen extra gerelateerde privacy maatregelen nodig
+zijn voor het opslaan van te indexeren gegevens. Maatregelen als een pseudoniem
+ter vervanging van BSN zijn dan ook niet nodig.
+
+Als laatste belangrijke voordeel is dat de huisarts NVI als functionaliteit
+ingebouwd kan worden in bestaande huisartsinformatiesystemen. Hierdoor is er
+geen aparte beheersorganisatie nodig voor een losse NVI.
+
+Om een lokalisatie vraag aan een huisarts NVI te stellen moet bepaald kunnen
+worden welke huisarts bij een specifiek BSN hoort. Hiervoor is een (conceptuele)
+NVI-lokalisatieservice nodig. Deze kan op verschillende wijzen worden ingevuld.
 
 #### ION 
 
@@ -164,27 +178,6 @@ XIS->>XIS: Zoek NVI-index op basis van de berekening
 Ongeacht de gekozen optie spelen de onderstaande uitdaging bij het toewijzen van
 een burger aan een specifieke NVI-partij.
 
-### Verplaatsing van toewijzing
-
-Het kan om verschillende redenen nodig zijn een om een NVI-toewijzing voor een
-specifieke burger aan te passen. In het geval van een regio toewijzing kan dit
-optreden indien iemand verhuist. Bij een algoritmische toewijzing is dit nodig
-bij een aanpassing in het aantal NVI-partijen.
-
-In een dergelijk geval zullen alle gegevens van NVI<sup>a</sup> naar
-NVI<sup>b</sup> verplaatst moeten worden. Hoewel dit een snelle transitie zorgt
-dit tijdens de transitie periode voor een inconsistente toestand. Een
-lokalisatie vraag gaat bijvoorbeeld al naar NVI<sup>B</sup> terwijl de gegevens
-daar nog niet volledig zijn gerepliceerd. Dergelijke problemen zijn technische
-tot op zeker hoogte te mitigeren door extra maatregelen in zowel de
-NVI-implementatie als de NVI gebruikende software.
-
-### Wijziging aantal NVI-partijen
-
-Zowel bij uitbreiding als bij reductie van het aantal NVI-partijen kan dit
-aanleiding geven om (grote) aantallen burgers een nieuwe toewijzing te geven
-(verplaatsing van toewijzing).
-
 ### Aansturing van NVI-partijen
 
 Door het model van toewijzing zijn er meerdere partijen verantwoordelijk voor
@@ -199,6 +192,35 @@ die burgers mislukt) of een partij die haar beveiliging niet op orde heeft.
 Bij de toewijzing op basis van huisarts speelt een uniek probleem. Niet elke
 persoon in Nederland, die wel over een BSN beschikt, is ingeschreven bij een
 huisarts.
+
+## Technische uitdagingen en randgevallen
+
+Elke optie voor de NVI, of het nu decentraal of centraal is, heeft haar eigen
+technische uitdagingen en randgevallen. De onderstaande punten zijn zaken waar
+tijdens de verdere uitwerking van een optie rekening mee gehouden kan worden om
+eventuele problemen zoveel mogelijk te voorkomen. 
+
+### Verplaatsing van toewijzing
+
+Het kan om verschillende redenen nodig zijn een om een NVI-toewijzing voor een
+specifieke burger aan te passen. In het geval van een regio toewijzing kan dit
+optreden indien iemand verhuist. Bij een algoritmische toewijzing is dit nodig
+bij een aanpassing in het aantal NVI-partijen.
+
+In een dergelijk geval zullen alle gegevens van NVI<sup>a</sup> naar
+NVI<sup>b</sup> verplaatst moeten worden. Hoewel dit een snelle transitie kan
+zijn, zorgt dit tijdens de transitie periode voor een inconsistente toestand.
+
+Een lokalisatie vraag gaat bijvoorbeeld al naar NVI<sup>B</sup> terwijl de
+gegevens daar nog niet volledig zijn gerepliceerd. Dergelijke problemen zijn
+technische tot op zeker hoogte te mitigeren door extra maatregelen in zowel de
+NVI-implementatie als de NVI gebruikende software.
+
+### Wijziging aantal NVI-partijen
+
+Zowel bij uitbreiding als bij reductie van het aantal NVI-partijen kan dit
+aanleiding geven om (grote) aantallen burgers een nieuwe toewijzing te geven
+(verplaatsing van toewijzing).
 
 ## Voordelen van een NVI-toewijzing ten opzicht van een centrale NVI
 
