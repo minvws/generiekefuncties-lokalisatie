@@ -106,7 +106,7 @@ actor Zorgverlener
 Zorgverlener->>XIS: Zoek gegevens over BSN
 XIS->>NVI-LS: Welke NVI voor deze BSN?
 NVI-LS->>ION: Welke huisarts hoort bij deze BSN?
-LSP->>NVI-LS: Dat is huisarts met AGB X
+NVI-LS->>NVI-LS: Dat is huisarts met AGB X
 NVI-LS->>ZORG-AB: Wat is de URA van AGB X?
 ZORG-AB->>NVI-LS: Dat is URA X
 NVI-LS->>GF-Adressering: Welke verbindingspunt hoort bij dienst NVI voor huisarts X?
