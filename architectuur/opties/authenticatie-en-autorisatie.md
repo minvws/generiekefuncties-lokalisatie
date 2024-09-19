@@ -59,80 +59,117 @@ Voor het doorlopen van de beslisboom zijn er verschillen bronnen nodig. Deze bro
 - Mitz - heeft toestemmingsregistratie
 - ... - doel?
 
-## Validatie
+## Het toegangsbewijs
 
 Op basis van de gegevens uit de beslisboom heeft een systeem (NVI/LMR) de
 mogelijkheid nodig om te verifiëren dat aan de voorwaarden voor het delen van
 gegevens voldaan is.
 
 Dit houdt in dat een aanvraag voor gegevens vergezeld dient te gaan met de
-antwoorden, en onderbouwing, uit de beslisboom. Hierbij is het belangrijk dat de gegevens vertrouwd kunnen worden. Om dit mogelijk te maken kan elke bron haar gegevens op een dusdanige manier aanleveren dat dit geautomatiseerd geverifieerd kan worden.
-
-Dit resulteert in een volgende data model.
+antwoorden, en onderbouwing, uit de beslisboom. Het totaal van deze gegevens is
+het toegangsbewijs. Hieronder volgt een grafische weergave van de velden in dit
+toegangsbewijs:
 
 ```mermaid
 mindmap
 root((Toegangsbewijs))
-	Online Toestemming
-		ID
+	Mitz
+		Referentie ID
 		Patient ID
 		Doelpartij
-		Toestemming
+		Toestemmingsstatus
 			Gegeven
 			Geen registratie
 	XIS Toestemming
+		Referentie ID
 		Zorgverlener
 			Verwijzing naar Dezi-ID
 		Toestemmingsgrond
 			Verwijzing naar Online Toestemming
 			Spoed
 		Doel
+		Zorgaanbieder-ID
 	Dezi
+		Referentie ID
 		Dezi-ID
 ```
 
+In bovenstaande diagram zijn bij het Toegangsbewijs drie primaire bronnen
+betrokken:
 
-> Weglaten: een expliciete toestemming dient
+- Dezi
+- Mitz
+- XIS
+
+Het toegangsbewijs bevat per bron de gegevens die nodig zijn voor het bepalen
+van de autorisatie. Een toegangsbewijs dient te allen tijde XIS en Dezi data te
+bevatten. Mitz is optioneel voor het geval waarbij de toestemmingsgrond de
+categorie "spoed" heeft.
+
+## Registratie en logging
+
+Bij het leveren van gegevens dient vastgelegd te worden wat de grond was waarop
+toegang gegeven is. Dit maakt het mogelijk om, in het geval van (mogelijke)
+problemen, aan te tonen dat de gegevens op legitieme grond geleverd zijn.
+
+Hierbij is het mogelijk dat het mogelijk om in de logs vast te leggen welke
+referentie ID's (zie [Het toegangsbewijs](#het-toegangsbewijs)) gebruikt zijn.
+Een andere optie is het vastleggen van het gehele toegangsbewijs. Dit laatste
+heeft als extra voordeel dat er bij de dienst die data levert een volledig beeld
+is van de leveringsgrond. Dit voorkomt, in het geval van triage, afhankelijkheid
+van andere systemen en partijen.
 
 
+## Verificatie van toegang
 
-
-Hierbij moet het systeem in staat zijn te registreren wat de grond voor levering van gegevens was. Dit kan, in het geval van een mogelijk probleem, gebruikt worden om te beoordelen of de gegevens op legitieme grond geleverd zijn.
-
-
-
-
-OTV als basis
-Autorisatie logica op basis van vastgelegde rollen en gegevens
-
-	1.	Een controle uit te voeren op deelnemer aan de uitwisseling/autorisatie afspraken. Als bijvoorbeeld de deelnemer een fysio therapeut is die informatie voor beeldbeschikbaarheid op wil vragen maar geen onderdeel is van de autorisatie-afspraken dan stopt het proces met een melding. 
-	2.	Een controle hoe de autorisatie-afspraken zijn opgesteld. Als die op het niveau van aanbieder en/of rolcode is dan volstaat de zorgidentiteit die al zicht geeft op de combinatie van ura en rolcode omdat dat attributen zijn die ook in de zorgidentiteit zijn opgenomen. 
-
-Wallet
-
-Behandelrelatie?
-
-	Willen we zeker weten dat de zorgverlener/arts beschikt over de juiste autorisaties dan moet ook hiervoor een token/VC beschikbaar komen. Die moet eigenlijk door het EPD van de instelling worden geleverd, dus we kunnen daarbij vragen om die te ‘uploaden’ in onze omgeving. Ook de VC voor Autorisatie moet worden opgenomen in de wallet die wij gebruiken (of die de zorgaanbieder/zorgverlener zelf gebruikt). 
-
-
-	Vanuit Mitz komt er een permit of deny terug in de vorm van een token of VC. Ook deze komt terecht in de wallet die hierboven al is benoemd. 
-
-
+Voor het doorlopen van de toegangsverificatie kan een systeem volstaan met de
+volgende controles.
 
 ```mermaid
-sequenceDiagram
-autonumber
-actor Zorgverlener
-Zorgverlener->>XIS: Zoek gegevens over BSN
-XIS->>NVI-LS: Welke NVI voor deze BSN?
-NVI-LS->>LSP: Welke huisarts hoort bij deze BSN?
-LSP->>NVI-LS: Dat is huisarts X
-NVI-LS->>GF-Adressering: Welke verbindingspunt hoort bij dienst NVI voor huisarts X?
-GF-Adressering->>NVI-LS: Dat is NVI X
-NVI-LS->>XIS: Dat is NVI X
+flowchart TD
+	toestemming["Heeft Mitz toestemming gegeven?"]
+	nood["Claimt het XIS een spoed situatie?"]
+	deel1["✅ Deel gegevens"]
+	deel2["✅ Deel gegevens"]
+
+	classDef einde fill:#fff,stroke-width:1px
+	class deel1,deel2,deel3 einde;
+
+	toestemming -->|Nee| nood
+	toestemming -->|Ja| deel1
+	
+	nood -->|Ja| deel2
 ```
 
-## Uitdagingen
+> Vraag: moet de impliciete toestemming (verwijzing) worden meegenomen? Dit is voor lokalisatie niet relevant omdat er dan al bekend is welke partijen betrokken zijn.
 
-## Technische uitdagingen en randgevallen
+Hierbij wordt er vanuit gegaan dat het XIS de inhoudelijke controle op
+behandelrelatie en doel uitgevoerd heeft. Een XIS zou geen contact mogen opnemen
+met een ander systeem als nog niet aan deze voorwaarde voldaan. Ook is in het
+bovenstaande stroomschema alle negatieve takken weglaten. Dit is gedaan om
+dezelfde reden. Een XIS zou, bijvoorbeeld bij een negatief antwoord vanuit Mitz,
+geen vraag moeten sturen naar een NVI/LMR.
+
+## Verificatie van toegangsbewijs
+
+Uit de stappen voor [verificatie van toegang](#verificatie-van-toegang) blijkt
+dat er twee claims zijn die minimaal vastgelegd dienen te worden. Deze claims
+komen van twee partijen; de zorgaanbieder (XIS) en Mitz.
+
+Deze claims dienen gevalideerd te kunnen worden. De claim vanuit het XIS kan
+impliciet geverifieerd worden. Het XIS stelt de vraag voor informatie via een
+beveiligde verbinding. Dit maakt dat er altijd vertrouwd kan worden dat deze
+claim door het XIS is opgesteld.
+
+De claim van Mitz kan niet impliciet geverifieerd worden. Hiervoor is expliciete
+verificatie noodzakelijk. Om dit te doen kan er van cryptografische technieken
+gebruik gemaakt worden waarmee bewezen kan worden dat de claim van Mitz
+afkomstig is. 
+
+
+## TODO
+
+- Autorisatie vereist ook een grondslag op doel & type zorgaanbieder (fysio mag nooit X uitvragen)
+- Vraag: moet er iets gebeuren met de rollen vanuit Dezi?
+- Technische uitwerking
 
