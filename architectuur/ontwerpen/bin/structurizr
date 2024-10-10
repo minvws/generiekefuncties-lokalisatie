@@ -1,0 +1,8 @@
+#!/usr/bin/env bash -e
+
+if ! docker images -q $IMAGE_NAME >/dev/null 2>&1; then
+    echo "Fetching structurizr"
+    docker pull structurizr/cli:latest
+fi
+
+docker run --rm -v .:/usr/local/structurizr structurizr/cli $@

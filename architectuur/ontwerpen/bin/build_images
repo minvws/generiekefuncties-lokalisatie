@@ -1,0 +1,12 @@
+#!/usr/bin/env bash -e
+
+plant_uml="plantuml"
+
+if ! command -v "$plant_uml" &> /dev/null; then
+    echo "The executable '$plant_uml' is not found."
+    echo "Please install it using the following command:"
+    echo "brew install plantuml"
+fi
+
+./bin/structurizr export -f plantuml -o afbeeldingen -w workspace.dsl
+$plant_uml -tsvg afbeeldingen
