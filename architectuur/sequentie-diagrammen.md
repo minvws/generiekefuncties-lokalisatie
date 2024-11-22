@@ -95,7 +95,7 @@ autonumber
 Saas_aanbieder->> BSNk: request DEP [OI1], DEP(BSN)@ZA1
 BSNk ->> BSNk: create & sign each requested DEP
 BSNk ->> Saas_aanbieder:  return (DEP(BSN)@OI1)
-Saas_aanbieder->>TV: ZA2->>TV: Gesloten Toestemmingsvraag <br/>[DEP(BSN)@ZA1, DEP(BSN)@TV], ZA1, ZA1-type
+Saas_aanbieder->>TV: Gesloten Toestemmingsvraag <br/>[DEP(BSN)@ZA1, DEP(BSN)@TV], ZA1, ZA1-type
 Saas_aanbieder->>OI1:  push (data, DEP(BSN)@OI1)
 OI1->>OI1: decrypt DEP(BSN)@OI1 to PS(BSN)@OI1
 OI1->>OI1: store (data, PS(BSN)@OI1)
@@ -119,6 +119,25 @@ BB->>BB: deliver mail
 ```
 
 # use-case IIc: Onderzoeksinstituut wil op basis ontvangen data aanvullende vragen stellen aan bv Huisarts of apotheek
+```mermaid
+sequenceDiagram
+autonumber
+OI1->> BSNk: request DEP [LR, TV, OI1], DEP(BSN)@OI1
+BSNk ->> BSNk: create & sign each requested DEP
+BSNk ->> Saas_aanbieder:  return [DEP(BSN)@LR, DEP(BSN)@TV, DEP(BSN)@OI1]
+OI1->>TV: Open Toestemmingsvraag <br/>[DEP(BSN)@LR, DEP(BSN)@TV, DEP(BSN)@OI1], OI1
+TV ->> TV: decrypt DEP(BSN)@TV to PS(BSN)@TV
+TV ->> TV: find toestemmingsantwoord [PS]
+TV ->> TV: sign [toestemmingsantwoord (OI1), [DEP(BSN)@LR, DEP(BSN)@TV, DEP(BSN)@OI1]]
+TV ->> Saas_aanbieder: return [toestemmingsantwoord (OI1), [DEP(BSN)@LR, DEP(BSN)@TV, DEP(BSN)@OI1]]
+OI1 ->> LR: Lokalisatievraag [toestemmingsantwoord (OI1), [DEP(BSN)@LR, DEP(BSN)@TV, DEP(BSN)@OI1]], OI1
+LR ->> LR: decrypt DEP(BSN)@LR to PS(BSN)@LR
+LR ->> LR: validate toestemmingsantwoord
+LR ->> LR: find permitted organisations (zorgaanbieders)
+LR ->> OI1: Send lokalisatieantwoord [HA1]
+OI1 ->>BSNk: vraag DEP voor HA1? Dan ontvangt niet BSN-gerechtigde partij iets dat wel om te zetten is tot BSN....
+
+```
 1) lokalisatie Huisarts/apotheek (mag niet-bsn gerechtigde partij OI1 DEPjes aanvragen voor LR?: vraag aan BSNk)
 2) Vraag DEP aan voor Huisarts/apotheek (via ZA1 die data aanleverde of mag niet-bvn gerechtigde partij OI1 DEPjes aanvragen voor Huisarts/Apotheek).
 3) Query aan Huisarts/apotheek
