@@ -1,0 +1,6 @@
+{
+    "languageToolLinter.languageTool.ignoredWordsInWorkspace": [
+        "nvi's",
+        "nvi-ls"
+    ]
+}
